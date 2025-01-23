@@ -1,0 +1,102 @@
+# Flow Log Parser
+
+## Overview
+The Flow Log Parser is a Python program that processes AWS VPC flow logs and maps them to tags based on a user-provided lookup table. The program generates a summary report with two key sections:
+
+1. **Tag Counts:** The number of flow log entries matched to each tag.
+2. **Port/Protocol Combination Counts:** The count of unique port/protocol combinations in the flow logs.
+
+This tool is particularly useful for analyzing and categorizing flow log data for troubleshooting, reporting, or compliance.
+
+---
+
+## Prerequisites
+
+### Environment
+- **Python Version:** Python 3.7 or higher
+- **Libraries:** The script uses the following standard libraries:
+  - `csv`
+  - `collections`
+  - `argparse`
+  - `logging`
+  
+No additional third-party libraries are required.
+
+---
+
+## Input Files
+
+### 1. Flow Logs File
+- **Format:** Plain text (ASCII)
+- **Structure:** AWS VPC flow log format (default version 2).
+
+### 2. Lookup Table
+- **Format:** CSV file with headers `dstport`, `protocol`, and `tag`.
+- **Case Insensitivity:** Headers and values are treated case-insensitively.
+
+---
+
+## Output File
+- **Format:** Plain text report with two sections:
+  1. **Tag Counts**: Shows the count of entries mapped to each tag, including unmatched entries (`Untagged`).
+  2. **Port/Protocol Combination Counts**: Displays counts of all unique `dstport,protocol` combinations.
+
+## How to Run
+
+### Command
+```bash
+python3 flow_log_parser.py <flow_logs_file> <lookup_table_file> <output_file>
+python3 flow_log_parser.py flow_logs.txt lookup_table.csv output.txt
+```
+
+### Arguments
+- `<flow_logs_file>`: Path to the input flow logs file.
+- `<lookup_table_file>`: Path to the lookup table CSV file.
+- `<output_file>`: Path to the output report file.
+
+---
+
+## Assumptions
+
+1. **Flow Log Format**: The script assumes the input flow logs adhere to AWS VPC Flow Log version 2 format.
+2. **Case Insensitivity**: Both the lookup table and flow logs are processed in a case-insensitive manner.
+3. **Graceful Failure**: If the lookup table is empty or invalid, the script will log the error and exit gracefully.
+
+---
+
+## Error Handling
+
+1. **Invalid or Missing Lookup Table**: Logs an error message and exits if the lookup table is missing, has invalid headers, or contains invalid data.
+2. **Empty Flow Logs File**: Generates an empty report if the flow logs file has no valid entries.
+3. **Invalid Protocol or Port**: Skips entries with missing or invalid `dstport` or `protocol` fields.
+
+---
+
+## Logging
+The program uses `logging` for debugging and error reporting:
+- **DEBUG**: Logs detailed steps of the process, including file loading and parsing.
+- **ERROR**: Captures issues with input files or data inconsistencies.
+
+---
+
+## Code Highlights
+
+### Key Features
+1. **Lookup Table Normalization**: Converts headers and values to lowercase for consistent processing.
+2. **Performance Optimization**: Uses dictionaries and `collections.Counter` for fast lookups and counting.
+3. **Readable Output**: Formats the output into clear, human-readable sections.
+
+### Directory Structure
+```
+project-folder/
+  ├── flow_log_parser.py  # Main script
+  ├── flow_logs.txt       # Sample flow logs file
+  ├── lookup_table.csv    # Sample lookup table
+  ├── output.txt   # Generated report
+```
+
+---
+
+## References
+- [AWS VPC Flow Logs Documentation](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html)
+
