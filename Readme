@@ -40,19 +40,24 @@ No additional third-party libraries are required.
 - **Format:** Plain text report with two sections:
   1. **Tag Counts**: Shows the count of entries mapped to each tag, including unmatched entries (`Untagged`).
   2. **Port/Protocol Combination Counts**: Displays counts of all unique `dstport,protocol` combinations.
+---
 
 ## How to Run
 
 ### Command
 ```bash
 python3 flow_log_parser.py <flow_logs_file> <lookup_table_file> <output_file>
-python3 flow_log_parser.py flow_logs.txt lookup_table.csv output.txt
 ```
 
 ### Arguments
 - `<flow_logs_file>`: Path to the input flow logs file.
 - `<lookup_table_file>`: Path to the lookup table CSV file.
-- `<output_file>`: Path to the output report file.
+- `<output_file>`: Path to the output file.
+
+### Example
+```bash
+python3 flow_log_parser.py flow_logs.txt lookup_table.csv output.txt
+```
 
 ---
 
@@ -93,6 +98,24 @@ project-folder/
   ├── flow_logs.txt       # Sample flow logs file
   ├── lookup_table.csv    # Sample lookup table
   ├── output.txt   # Generated report
+```
+
+---
+
+## Testing
+### Test Cases
+
+| Scenario                            | Input Details                          | Expected Output |
+|-------------------------------------|----------------------------------------|-----------------|
+| Valid flow logs and lookup table    | Sample inputs provide                  | Tag and port counts are accurate |
+| Empty lookup table                  | Empty `lookup_table.csv`               | All entries are `Untagged`       |
+| Missing flow log file               | Non-existent file path                 | Logs error and exits             |
+| Invalid lookup table headers        | Missing `dstport`, `protocol`, or `tag`| Logs error and exits             |
+
+### Run Tests
+Use sample files or edge cases to verify functionality:
+```bash
+python3 flow_log_parser.py test_logs.txt test_lookup.csv test_output.txt
 ```
 
 ---
