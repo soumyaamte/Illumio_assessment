@@ -113,7 +113,6 @@ project-folder/
 | Invalid lookup table headers        | Missing `dstport`, `protocol`, or `tag`| Logs error and exits             |
 
 ### Run Tests
-Use sample files or edge cases to verify functionality:
 ```bash
 python3 flow_log_parser.py test_logs.txt test_lookup.csv test_output.txt
 ```
